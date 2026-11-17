@@ -1,41 +1,49 @@
-# Torsdagsopgave - Supermarked
-Torsdagsopgave om datastrukturer
+# Torsdagsopgave – Supermarked
 
-Du skal lave et kasseapperat der kan udskrive en pæn kassebon.
+Torsdagsopgave om datastrukturer i Java.
 
-I `data` mappen ligger der to csv-filer - `varer.csv` og `tilbud.csv` - de er stort set ens, indeholder følgende data om hver vare:
+Du skal lave et kasseapparat, der kan udskrive en pæn kassebon.
 
-- varenummer (EAN nummer)
-- navn
-- dato for sidste prisændring
-- pris
-- antal styk/gram/ml
-- enhed, altså styk, gram, ml, eller andet
+## Datafiler
 
-og nogle andre værdier som måske kan være af relevans.
+I mappen `data` ligger der to CSV-filer, `varer.csv` og `tilbud.csv`. De indeholder blandt andet følgende oplysninger om hver vare.
 
-`tilbud.csv` indeholder nogle af de samme varenumre, men kun såfremt varen er på tilbud for tiden. Og så vil pris (og dato for prisændring) være en anden.
+- Varenummer (EAN-nummer)
+- Navn
+- Dato for sidste prisændring
+- Pris
+- Mængde, fx 6, 500 eller 1000
+- Enhed, fx stk., gram eller ml
+
+`tilbud.csv` indeholder kun de varer, der er på tilbud. En tilbudsvare har samme EAN-nummer som i `varer.csv`, men prisen og datoen for prisændringen kan være anderledes.
 
 ## Din opgave
 
-Du skal skrive kode der indlæser de mange varer, til nogle `Vare` objekter og gemmer dem i nogle Collections. For eksempel med `alleVarer` og `tilbudsVarer`. 
+Skriv kode, der indlæser varerne fra CSV-filerne som `Vare`-objekter og gemmer dem i passende datastrukturer. Du kan fx kalde dem `alleVarer` og `tilbudsVarer`.
 
-Så skal du lave kode til et kasseapparat der modtager en tredje Collection - en kurvfuld af blandede varer, som en kunde har samlet sammen i butikken. Vel at bemærke en kunde der ikke er opmærksom på om de er taget fra udvalget af normalpriser, eller tilbudsvarer.
+Lav derefter et kasseapparat, der modtager en kurv med varer, som en kunde har samlet i butikken. Kasseapparatet skal selv finde ud af, hvilke varer der er på tilbud.
 
-Kasseapparatet skal gøre flere ting:
-* Undersøge om varen er på tilbud eller ej, og tage den rigtige pris
-* Regne den samlede totalpris ud
-* Regne moms-delen af totalprisen ud
-* og udskrive en kassebon.
+Kasseapparatet skal
 
-Den kassebon skal være smartere end bare en "dum" liste af alle varer fra kurven!
-* Hvis der er købt flere af samme vare, for eksempel to bananer á 2,50 så skal der ikke stå Banan 2,50 to steder på bonen, men derimod være én line hvor der står Banan, efterfulgt af en linje med 2 * 2,50 og så den samlede pris. (Forudsat at bananer altså koster 2,50)
-* Hvis der er købt en vare der er på tilbud, skal der ikke kun stå tilbudsprisen, men derimod normalprisen, og så en efterfølgende linje med rabatten, altså hvor meget der er sparet (som et negativt tal)
+- undersøge, om hver vare er på tilbud, og bruge den rigtige pris
+- beregne det samlede beløb efter rabatter
+- beregne, hvor stor en del af beløbet der er moms
+- udskrive en kassebon, når alle varer er scannet
 
-Og kassebonen skal selvfølgelig først udskrives når alle varer er "scannet", så selv om varerne bliver kastet op på båndet i en stor blanding, så finder kasseapparatet alligevel ud af at samle de varer der måtte være flere af.
+## Krav til kassebonen
 
-For at hjælpe dig lidt med at teste det, er der tilføjet en `Robot.java` kode som du godt må kopiere og bruge i dit projekt - ændr gerne packagenavne til noget der giver mening for dig!
+- **Saml ens varer.** Hvis kunden fx køber to bananer til 2,50 kr. pr. stk., skal varenavnet `Banan` stå én gang. På næste linje vises antal, stykpris og samlet pris, fx `2 × 2,50 kr. = 5,00 kr.`
+- **Vis rabatten.** Hvis en vare er på tilbud, skal bonen først vise normalprisen og derefter rabatten på en separat linje som et negativt beløb.
+- **Håndter blandet rækkefølge.** To ens varer skal samles på bonen, selv om der ligger andre varer imellem dem i kurven.
 
-Den robot kan fylde en kurv op med tilfældigt udvalgte varer, nogle gange tager den kun 1 af hver, nogle gange flere, men den blander dem altid fuldstændig vilkårligt.
+## Test med `Robot.java`
 
-Opgaven går især ud på at planlægge kodens struktur og udvælge de bedst passende datastrukturer, så der er ikke nærmere fastlagt hvilke packages, klasser og metoder du skal bruge - det er op til dig selv!
+Du kan kopiere `Robot.java` ind i dit projekt og tilpasse pakkenavnet. Robotten fylder en kurv med tilfældigt udvalgte varer og blander rækkefølgen. Nogle gange vælger den én af hver vare, andre gange vælger den flere af samme vare.
+
+## Begrund dit valg af datastrukturer
+
+Du bestemmer selv, hvordan du opdeler koden i pakker, klasser og metoder. Når kasseapparatet virker, skal du afprøve og forklare dine valg.
+
+- **Sammenlign `ArrayList` og `LinkedList`.** Afprøv kasseapparatet med de samme varer i samme rækkefølge i begge lister. Hvilke operationer udfører kasseapparatet på kurven, og hvilken liste ville du vælge til dem? Begrund dit valg.
+- **Find antallet af forskellige varer med et `Set`.** Brug et `Set` med EAN-numre til at finde ud af, hvor mange forskellige varer kunden har købt. Kurven `[banan, mælk, banan]` indeholder tre varer, hvoraf to er forskellige. Hvis du allerede har brugt et `Map` til at tælle varerne, hvordan kan du så finde antallet af forskellige varer direkte fra det?
+- **Forklar dit valg af nøgle.** Hvorfor er EAN-nummeret en egnet nøgle, når du slår priser op og samler ens varer på bonen?
